@@ -11,7 +11,7 @@ func Runserver(port string){
 
 	user := router.Group("user")
 
-	user.GET("/checkuser",CheckUser())
+	user.POST("/checkuser",CheckUser())
 
 	router.Run(port)
 }
