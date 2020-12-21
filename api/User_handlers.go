@@ -3,7 +3,6 @@ package api
 import (
 	"bytes"
 	"encoding/json"
-	//"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go_nodebb_sdk/models"
@@ -40,26 +39,25 @@ func CheckUser() gin.HandlerFunc{
 			})
 		}else{
 			//values.Password = "upskillpass" //defaultpass
-			json_fmt := &models.User{Username: values.Username,Email: values.Email,Password: "upskillpass"}
+			json_fmt := map[string]string{"username": values.Username,"email": values.Email,"password": "upskillpass"}
 			value, _ := json.Marshal(json_fmt)
 
+			//fmt.Println(bytes.NewBuffer(value)) //{"email":"upskill@gmail.com","username":"testuser","password":"upskillpass"}
 
-			//json_data := string(value)
+			url = models.Domain+"/api/v2/users/"
+			res,err := http.Post(url,"application/json",bytes.NewBuffer(value))
 
-			fmt.Println(bytes.NewBuffer(value)) //{"email":"upskill@gmail.com","username":"testuser","password":"upskillpass"}
-
-
-			//url = models.Domain+"/api/v2/users/"
-			//res,err := http.Post(url,"application/json",bytes.NewBuffer(value))
-			//
-			//if err != nil{
-			//	c.JSON(http.StatusInternalServerError,gin.H{"error":"cannot create new user for nodebb"})
-			//}else{
-			//	c.JSON(http.StatusOK,gin.H{
-			//		"message":"New user created for nodebb",
-			//		"nodebb" : res,
-			//	})
-			//}
+			if err != nil{
+				//fmt.Println(err)
+				c.JSON(http.StatusInternalServerError,gin.H{
+					"error":"cannot create new user for nodebb",
+				})
+			}else{
+				c.JSON(http.StatusOK,gin.H{
+					"message":"New user created for nodebb",
+					"nodebb" : res,
+				})
+			}
 
 		}
 	}
