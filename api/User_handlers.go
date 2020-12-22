@@ -40,7 +40,7 @@ func CheckUser() gin.HandlerFunc{
 		}else{
 			//values.Password = "upskillpass" //defaultpass
 			json_fmt := map[string]string{"username": values.Username,"email": values.Email,"password": "upskillpass"}
-			value, _ := json.Marshal(json_fmt)
+			value,_ := json.Marshal(json_fmt)
 
 			//fmt.Println(bytes.NewBuffer(value)) //{"email":"upskill@gmail.com","username":"testuser","password":"upskillpass"}
 
@@ -48,16 +48,17 @@ func CheckUser() gin.HandlerFunc{
 			res,err := http.Post(url,"application/json",bytes.NewBuffer(value))
 
 			if err != nil{
-				//fmt.Println(err)
+				fmt.Println(err)
 				c.JSON(http.StatusInternalServerError,gin.H{
 					"error":"cannot create new user for nodebb",
 				})
 			}else{
 				c.JSON(http.StatusOK,gin.H{
 					"message":"New user created for nodebb",
-					"nodebb" : res,
+					"nodebb" : res.StatusCode,
 				})
 			}
+
 
 		}
 	}

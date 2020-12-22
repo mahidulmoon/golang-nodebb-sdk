@@ -10,8 +10,10 @@ func Runserver(port string){
 	router.Use(CORSMiddleware())
 
 	user := router.Group("user")
+	groups := router.Group("groups")
 
 	user.POST("/checkuser",CheckUser())
+	groups.POST("/checkgroupexist",CheckGroupExist())
 
 	router.Run(port)
 }
